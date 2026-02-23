@@ -35,9 +35,6 @@ namespace webapi_first.Repositories
                 serviceResponse.Message = "Wrong Password";
             }
             return serviceResponse;
-            
-    
-            
         }
 
         public async Task<ServiceResponse<int>> Register(User user, string password)
@@ -58,7 +55,6 @@ namespace webapi_first.Repositories
             await _context.SaveChangesAsync();
             serviceResponse.Data = user.Id;
             return serviceResponse;
-
         }
 
         public async Task<bool> UserExists(string username)
@@ -102,7 +98,6 @@ namespace webapi_first.Repositories
             {
                 throw new Exception("No Token Found");
             }
-
             SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(appSettingsToken));
 
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
@@ -120,6 +115,7 @@ namespace webapi_first.Repositories
 
             
             return tokenHandler.WriteToken(token);
+            
         }
     }
 }

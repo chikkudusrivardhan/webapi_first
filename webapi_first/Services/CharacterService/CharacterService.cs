@@ -81,7 +81,7 @@ namespace webapi_first.Services.CharacterService
                 dbCharacter.Defence = updatedCharacter.Defence;
                 dbCharacter.Intelligence = updatedCharacter.Intelligence;
                 dbCharacter.Class = updatedCharacter.Class;
-
+                
                 await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
             }

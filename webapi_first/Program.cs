@@ -15,20 +15,34 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<DataContext>(options => options
                 .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Learn more abo configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddSwaggerGen(options =>
 {
-    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Description = "",
+        Type = SecuritySchemeType.ApiKey,
         In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey
-
+        Description = ""
     });
-    c.OperationFilter<SecurityRequirementsOperationFilter>();
+    options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
+//builder.Services.AddSwaggerGen(c =>
+//{
+//    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+//    {
+//        Name = "Authorization",
+//        Description = "",
+//        In = ParameterLocation.Header,
+//        Type = SecuritySchemeType.ApiKey
+
+//    });
+//    c.OperationFilter<SecurityRequirementsOperationFilter>();
+//});
+
 //AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 //Services
@@ -38,6 +52,20 @@ builder.Services.AddScoped<IFightService, FightService>();
 //Repositories
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 //Authentication JWT
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        ValidateIssuer = false,
+//        ValidateIssuerSigningKey = true,
+//        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+//        .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value!)),
+//        ValidateAudience = false,
+//    });
+
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
 options.TokenValidationParameters = new TokenValidationParameters
